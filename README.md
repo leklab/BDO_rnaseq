@@ -15,21 +15,20 @@ The FASTQ files were aligned to hg38 human reference genome with GENCODE v26 ann
 **Requirements**
 
 Using HPC
-`STAR
-picard
-SAMtools
-Python
-RSEM`
+`STAR`
+`Picard`
+`SAMtools`
+`Python`
+`RSEM``
 
 In R
-`DESeq2
-
-GoSeq
-org.Hs.eg.db
-tximport
-tidyverse
-ggplot2
-pheatmap
-EnhancedVolcano`
+`DESeq2`
+`GoSeq`
+`org.Hs.eg.db`
+`tximport`
+`tidyverse`
+`ggplot2`
+`pheatmap`
+`EnhancedVolcano`
 
 
