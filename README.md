@@ -19,7 +19,7 @@ Using HPC
 `Picard`
 `SAMtools`
 `Python`
-`RSEM``
+`RSEM`
 
 In R
 `DESeq2`
