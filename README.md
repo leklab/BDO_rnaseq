@@ -4,7 +4,7 @@ RNA sequencing data processing and analysis of bile-derived organoids
 
 **Processing on Yale HPC cluster**
 
-The FASTQ files were aligned to hg38 human reference genome with GENCODE v26 annotations by STAR using the pipeline described at https://github.com/leklab/RNAseq, and RSEM was used to quantify gene expression levels from the STAR-aligned bam files (`rsem.sh`).
+The FASTQ files were aligned to hg38 human reference genome with GENCODE v26 annotations by STAR using the pipeline described at https://github.com/leklab/RNAseq. RSEM was used to quantify gene expression levels from the STAR-aligned bam files (`rsem.sh`).
 
 **Downstream analysis in R**
 
