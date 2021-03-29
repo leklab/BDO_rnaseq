@@ -1,3 +1,5 @@
+#may need to install these packages
+
 library(DESeq2)
 library(tximport)
 library(tidyverse)
@@ -15,8 +17,7 @@ library(org.Hs.eg.db)
 samples <- read_tsv('groups.tsv', col_names = c('sample', 'group'))
 
 #sample comparisons
-samples_BvsA <- samples[samples$group=="Group_A_CTL-org" | samples$group=="Group_B_Th17",]
-samples_CvsA <- samples[samples$group=="Group_A_CTL-org" | samples$group=="Group_C_IL17-org",]
+samples_CvsA <- samples[samples$group=="CTL-org" | samples$group=="IL17-org",]
 
 #needed for goseq
 #sed 's/\(ENSG[0-9]*\)\.[0-9]*/\1/g' gencode.v26.GRCh38.ERCC.genes.gtf > gencode.v26.GRCh38.ERCC.genes.fix.gtf
@@ -88,7 +89,6 @@ run_goseq <- function(samples,group1,group2,comparison){
   write.table(as.data.frame(GO.wall), file = sprintf("/results/%s/%s_GO.enrichment_results.txt",comparison,comparison), append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
 }
 
-run_goseq(samples_BvsA,"Group_B_Th17","Group_A_CTL-org","GroupB_allvsGroupA")
-run_goseq(samples_CvsA,"Group_C_IL17-org","Group_A_CTL-org","GroupCvsGroupA")
+run_goseq(samples_CvsA,"IL17-org","CTL-org","GroupCvsGroupA")
 
 
