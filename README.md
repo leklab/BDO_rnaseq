@@ -12,7 +12,7 @@ sed 's/\(ENSG[0-9]*\)\.[0-9]*/\1/g' gencode.v26.GRCh38.ERCC.genes.gtf > gencode.
 
 RSEM was used to quantify gene expression levels from the STAR-aligned bam files (`rsem.sh`). The ```rsem.genes.results``` output files were used for downstream analyses. The following additional processing step is required:
 
-```#format rsem files- remove version numbers
+```#format rsem files- remove version numbers - needed for goseq
   ls -1 *results | while read line
   do
   	cat $line | sed 's/\(ENSG[0-9]*\)\.[0-9]*/\1/g' > $line.fix
@@ -45,4 +45,4 @@ In R:
 `EnhancedVolcano`
 `rtracklayer`
 
-
+DESeq2, tximport, EnhancedVolcano, and rtracklayer were installed through the bioconductor package manager.
