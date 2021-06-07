@@ -5,10 +5,12 @@ RNA sequencing data processing and analysis of bile-derived organoids
 **Processing on Yale HPC cluster**
 
 The FASTQ files were aligned to hg38 human reference genome with GENCODE v26 annotations by STAR using the pipeline described at https://github.com/leklab/RNAseq - `gencode.v26.GRCh38.annotation.gtf` is the GTF from GENCODE downloaded from https://www.gencodegenes.org/human/release_26.html. The following additional processing step is required for Goseq:
+
 `#needed for goseq
 sed 's/\(ENSG[0-9]*\)\.[0-9]*/\1/g' gencode.v26.GRCh38.ERCC.genes.gtf > gencode.v26.GRCh38.ERCC.genes.fix.gtf'
 
 RSEM was used to quantify gene expression levels from the STAR-aligned bam files (`rsem.sh`). The ```rsem.genes.results``` output files were used for downstream analyses. The following additional processing step is required:
+
 `#format rsem files- remove version numbers
   ls -1 *results | while read line
   do
