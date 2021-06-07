@@ -22,6 +22,8 @@ samples_BvsD <- samples[samples$group=="Org+Th17" | samples$group=="Th17",]
 #samples is relevant sample sheet, and comparison is the name of the comparison to be used in file saving
 #groups are which 2 groups to be compared, treated group first
 run_deseq <- function(samples,group1,group2,comparison){
+  dir.create(sprintf("results/%s",comparison)) 
+  
   print("import rsem files")
   files <- file.path("RSEM_files", paste0(samples$sample, ".rsem.genes.results"))
   names(files) <- samples$sample
@@ -59,7 +61,7 @@ run_deseq <- function(samples,group1,group2,comparison){
   res <- results(dds, alpha=0.05, contrast = c("condition",group1,group2)) #alpha is the adjusted p value cutoff, default is 0.1 
   print(res)
   print(summary(res))
-  sink(file = sprintf("/results/%s/%s_results_summary.txt",comparison,comparison))
+  sink(file = sprintf("results/%s/%s_results_summary.txt",comparison,comparison))
   summary(res)
   sink(file = NULL)
   
@@ -86,9 +88,9 @@ run_deseq <- function(samples,group1,group2,comparison){
   print("save")
   res <- as_tibble(res) %>% mutate(gene_id = rownames(res)) %>% left_join(gtf) %>% data.frame() #add gene name
   resOrdered <- as.data.frame(res[order(res$pvalue),])
-  write.table(resOrdered, file = sprintf("/results/%s/%s_results.txt",comparison,comparison), append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+  write.table(resOrdered, file = sprintf("results/%s/%s_results.txt",comparison,comparison), append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
   res.sig <- resOrdered[!is.na(resOrdered$padj) & (resOrdered$padj<0.05),]
-  write.table(res.sig, file = sprintf("/results/%s/%s_results_sig_only.txt",comparison,comparison), append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+  write.table(res.sig, file = sprintf("results/%s/%s_results_sig_only.txt",comparison,comparison), append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
   print(nrow(res.sig))
   
   print("Volcano plot")
@@ -109,7 +111,7 @@ run_deseq <- function(samples,group1,group2,comparison){
                   colAlpha = 1, 
                   subtitle = NULL, 
                   legendVisible = F)
-  ggsave(sprintf("/results/%s/%s_volcano.png",comparison,comparison), width = unit(7, 'in'), height  = unit(8, 'in'))
+  ggsave(sprintf("results/%s/%s_volcano.png",comparison,comparison), width = unit(7, 'in'), height  = unit(8, 'in'))
 }
 
 run_deseq(samples_BvsA,"Org+Th17","CTL-org","GroupB_allvsGroupA")

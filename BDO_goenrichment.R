@@ -86,7 +86,7 @@ run_goseq <- function(samples,group1,group2,comparison){
   print("run goseq, default method")
   GO.wall=goseq(pwf,"hg38","ensGene")
   print(head(GO.wall, n=20))
-  write.table(as.data.frame(GO.wall), file = sprintf("/results/%s/%s_GO.enrichment_results.txt",comparison,comparison), append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+  write.table(as.data.frame(GO.wall), file = sprintf("results/%s/%s_GO.enrichment_results.txt",comparison,comparison), append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
 }
 
 run_goseq(samples_CvsA,"IL17-org","CTL-org","GroupCvsGroupA")

@@ -12,15 +12,15 @@ library(dplyr)
 
 #group D - Th17 alone, group A - control organoids alone, group B - organoids + Th17 cells
 #this is a specialized analysis to identify genes upregulated in group B vs group A, and in group B vs group D
-GrpBvsGrpD <- read.table("/results/GroupBvsGroupD_Tcells/GroupBvsGroupD_Tcells_results.txt", header=TRUE)
-GrpBvsGrpA <- read.table("/results/GroupB_allvsGroupA/GroupB_allvsGroupA_results.txt", header=TRUE)
+GrpBvsGrpD <- read.table("results/GroupBvsGroupD_Tcells/GroupBvsGroupD_Tcells_results.txt", header=TRUE)
+GrpBvsGrpA <- read.table("results/GroupB_allvsGroupA/GroupB_allvsGroupA_results.txt", header=TRUE)
 #subset
 GrpBvsGrpD_subset <- GrpBvsGrpD[GrpBvsGrpD$log2FoldChange>1,]
 #subset groupB vs groupA by genes that are upregulated in B vs D, then subset to genes increased in groupB vs groupA
 GrpBvsGrpA_subset <- GrpBvsGrpA[which(GrpBvsGrpA$gene_id %in% GrpBvsGrpD_subset$gene_id),]
 GrpBvsGrpA_subset <- GrpBvsGrpA_subset[GrpBvsGrpA_subset$log2FoldChange>1 & order(GrpBvsGrpA_subset$padj),]
 #write to file
-write.table(GrpBvsGrpA_subset, file = "/results/GroupBvsGroupA_subset/GroupBvsGroupA_subset_results.txt", append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(GrpBvsGrpA_subset, file = "results/GroupBvsGroupA_subset/GroupBvsGroupA_subset_results.txt", append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
 
 #volcano plot
 EnhancedVolcano(GrpBvsGrpA_subset,
@@ -40,7 +40,7 @@ EnhancedVolcano(GrpBvsGrpA_subset,
                 legendVisible = F,
                 drawConnectors = TRUE,
                 pLabellingCutoff = 1e-7) #this is equal to -log10P of 7
-ggsave("/results/GroupBvsGroupA_subset/GroupBvsGroupA_subset_volcano.png", width = unit(10, 'in'), height  = unit(8, 'in'))
+ggsave("results/GroupBvsGroupA_subset/GroupBvsGroupA_subset_volcano.png", width = unit(10, 'in'), height  = unit(8, 'in'))
 
 #to get the heatmap, need the dds object
 gtf <- as_tibble(rtracklayer::import('gencode.v26.GRCh38.ERCC.genes.gtf'))
@@ -49,6 +49,8 @@ samples <- read_tsv('groups.tsv', col_names = c('sample', 'group'))
 samples_BvsA <- samples[samples$group=="CTL-org" | samples$group=="Org+Th17",]
 
 run_deseq_modified <- function(samples,group1,group2,comparison){
+  dir.create(sprintf("results/%s",comparison)) 
+  
   print("import rsem files")
   files <- file.path("RSEM_files", paste0(samples$sample, ".rsem.genes.results"))
   names(files) <- samples$sample
@@ -107,7 +109,7 @@ mat <- mat[order(row.names(mat)), ] #note this means plot is in order of ENSG nu
 rownames(mat) = rownames_df$gene_name #change from ENSG to gene id
 # and plot the actual heatmap
 pheatmap(mat, annotation_col=df, show_rownames = T, fontsize_row = 5, legend = F, annotation_names_col = F, height = 10, 
-         filename ="/results/GroupBvsGroupA_subset/GroupBvsGroupA_subset_heatmap.png")
+         filename ="results/GroupBvsGroupA_subset/GroupBvsGroupA_subset_heatmap.png")
 
 ##run GO enrichment, using res from above
 # needed for goseq
@@ -131,4 +133,4 @@ gene.vectorDE <- gene.vector[intersect(names(gene.vector),names(lengthData))]
 
 pwf=nullp(gene.vectorDE,"hg38","ensGene", bias.data = lengthDataDE)
 GO.wall=goseq(pwf,"hg38","ensGene")
-write.table(as.data.frame(GO.wall), file = "/results/GroupBvsGroupA_subset/GroupBvsGroupA_subset_GO.enrichment_results.txt", append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(as.data.frame(GO.wall), file = "results/GroupBvsGroupA_subset/GroupBvsGroupA_subset_GO.enrichment_results.txt", append = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)

@@ -40,4 +40,4 @@ dds <- DESeq(dds)
 ## PCA plot
 vsd <- vst(dds, blind=FALSE)
 plotPCA(vsd, intgroup="condition") + theme_bw() 
-ggsave("/results/allsamples_PCA.png", width = unit(7, 'in'), height  = unit(8, 'in'))
+ggsave("results/allsamples_PCA.png", width = unit(7, 'in'), height  = unit(8, 'in'))
